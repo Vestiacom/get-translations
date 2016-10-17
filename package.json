@@ -1,0 +1,16 @@
+{
+  "name": "get-translations",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Translations generator",
+  "main": "index.js",
+  "keywords": ["translations", "google", "spreadsheets"],
+  "author": "Hubert Pietrusiak <hp@vestiacom.com> (http://pietrusiak.me/)",
+  "dependencies": {
+    "google-spreadsheet": "~2.0.3"
+  },
+  "engines": {
+    "node" : ">=6.0.0"
+  },
+  "engineStrict": true
+}
