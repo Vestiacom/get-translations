@@ -12,7 +12,9 @@ module.exports = (content, config) => {
 
   content.forEach((row) => {
     config.languages.forEach((lang) => {
-      result[lang.columnName][config.products.valueMap[row.product]][row[config.keysColumnName]] = row[lang.columnName];
+      if(row[lang.columnName] && row[lang.columnName] !== '') {
+        result[lang.columnName][config.products.valueMap[row.product]][row[config.keysColumnName]] = row[lang.columnName];
+      }
     });
 
   });
