@@ -7,13 +7,20 @@
   "bin": {
     "get-translations": "index.js"
   },
-  "keywords": ["translations", "google", "spreadsheets"],
+  "keywords": [
+    "translations",
+    "google",
+    "spreadsheets"
+  ],
   "author": "Hubert Pietrusiak <hp@vestiacom.com> (http://pietrusiak.me/)",
   "dependencies": {
-    "google-spreadsheet": "~2.0.3"
+    "bluebird": "3.4.6",
+    "fs-promise": "0.5.0",
+    "google-spreadsheet": "~2.0.3",
+    "minimist": "1.2.0"
   },
   "engines": {
-    "node" : ">=6.0.0"
+    "node": ">=6.0.0"
   },
   "engineStrict": true
 }
