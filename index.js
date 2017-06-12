@@ -66,7 +66,16 @@ fs.readJson(settings.filename)
   })
 
   .then((result) => {
-    sheet = result.worksheets[0];
+    let index = 0;
+
+    if(settings.config.sheetName) {
+      let tempIndex = result.worksheets.findIndex(item => item.title === settings.config.sheetName)
+      console.log('index')
+      console.log(result.worksheets.findIndex(item => item.title === settings.config.sheetName))
+      index = tempIndex || index
+    }
+
+    sheet = result.worksheets[index];
 
     console.log(`Spreadsheet name: ${result.title}`);
     console.log(`URL: ${result.id}`);
