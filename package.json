@@ -1,6 +1,8 @@
 {
   "name": "vestiacom-get-translations",
-  "version": "1.2.0",
+  "version": "1.2.1",
+  "repository": "http://gerrit.vestiacom.com/#/admin/projects/get-translations",
+  "homepage": "http://internal.vestiacom.com/get-translations",
   "description": "Translations generator",
   "main": "index.js",
   "bin": {
