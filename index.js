@@ -1,8 +1,7 @@
 #!/usr/bin/env node
-const GoogleSpreadsheet = require('google-spreadsheet');
+const { GoogleSpreadsheet } = require('google-spreadsheet');
 const argv = require('minimist')(process.argv.slice(2));
 const fs = require('fs-promise');
-const Promise = require('bluebird');
 
 const errorHandler = require('./error-handler');
 const parser = require('./parser');
@@ -32,7 +31,7 @@ fs.readJson(settings.filename)
     }
   })
 
-  .then(() => {
+  .then(async () => {
     let guard = null;
 
     mandatoryFields.forEach((field) => {
@@ -42,46 +41,40 @@ fs.readJson(settings.filename)
     });
 
     if(guard) {
-      return Promise.reject({code: 'MISFIELD', Error: `Error in ${settings.filename} file. ${guard} field is mandatory`})
-    } else {
-      Promise.resolve();
+      throw new Error({code: 'MISFIELD', Error: `Error in ${settings.filename} file. ${guard} field is mandatory`})
     }
   })
 
-  .then(() => {
-    doc = Promise.promisifyAll(new GoogleSpreadsheet(settings.config.spreadsheet));
+  .then(async () => {
+    doc = new GoogleSpreadsheet(settings.config.spreadsheet);
 
     if(settings.credentials) {
-      return Promise.promisify(doc.useServiceAccountAuth)(settings.credentials);
-    } else {
-      return Promise.resolve();
+      return await doc.useServiceAccountAuth(settings.credentials);
     }
-
   })
 
-  .then(() => {
+  .then(async () => {
     console.log('Got access in the Google Spreadsheets');
 
-    return Promise.promisify(doc.getInfo)();
+    return await doc.loadInfo();
   })
 
-  .then((result) => {
+  .then(async () => {
     let index = 0;
 
     if(settings.config.sheetName) {
-      let tempIndex = result.worksheets.findIndex(item => item.title === settings.config.sheetName)
+      let tempIndex = doc.sheetsByIndex.findIndex(item => item.title === settings.config.sheetName)
       console.log('index')
-      console.log(result.worksheets.findIndex(item => item.title === settings.config.sheetName))
+      console.log(doc.sheetsByIndex.findIndex(item => item.title === settings.config.sheetName))
       index = tempIndex || index
     }
 
-    sheet = result.worksheets[index];
+    sheet = doc.sheetsByIndex[index];
 
-    console.log(`Spreadsheet name: ${result.title}`);
-    console.log(`URL: ${result.id}`);
-    console.log(`Last modified: ${result.updated}`);
+    console.log(`Spreadsheet name: ${doc.title}`);
+    console.log(`URL: ${doc.spreadsheetId}`);
 
-    return Promise.promisify(sheet.getRows)(1);
+    return await sheet.getRows();
   })
 
   .then((result) => {
